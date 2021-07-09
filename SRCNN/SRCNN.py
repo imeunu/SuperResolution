@@ -72,7 +72,7 @@ def build_SRCNN():
     model.add(Conv2D(filters=64, kernel_size = (9, 9), activation='relu', padding='same'))
     model.add(Conv2D(filters=32, kernel_size = (1, 1), activation='relu', padding='same'))
     model.add(Conv2D(filters=1, kernel_size = (5, 5), activation='linear', padding='same'))
-    adam = keras.optimizers.Adam(learning_rate=0.001)
+    adam = keras.optimizers.Adam(learning_rate=0.0001)
     model.compile(loss='mean_squared_error', optimizer=adam, metrics=['mean_squared_error'])
     return model
 
@@ -82,7 +82,7 @@ callbacks_list = [
                     monitor = 'loss', save_best_only=True),
     ReduceLROnPlateau(monitor='loss', factor=0.1, patience=10, verbose=1, mode='min', min_delta=1e-4)]
 model = build_SRCNN()
-history = model.fit(lr,hr,epochs=400,batch_size=64,callbacks=callbacks_list)
+history = model.fit(lr,hr,epochs=10000,batch_size=64,callbacks=callbacks_list)
   
 # Save Architecture
 model_json = model.to_json()
