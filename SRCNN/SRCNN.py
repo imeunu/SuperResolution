@@ -1,5 +1,6 @@
 from google.colab import drive
 drive.mount('/content/gdrive')
+
 import os
 import cv2
 import h5py
@@ -28,6 +29,35 @@ def modcrop(img, scale):
 def shave(image, border):
     img = image[border: -border, border: -border]
     return img
+
+def postprocess(pred):
+  pred[pred[:] > 255] = 255
+  pred[pred[:] < 0] = 0
+  pred = pred.astype(np.uint8)
+  return pred
+
+def psnr(x, y, peak=255):
+    '''
+    x: images
+    y: another images
+    peak: MAX_i peak. if int8 -> peak =255
+    :return: return psnr value
+    '''
+    _max = peak
+    x = x.astype(np.float32)
+    y = y.astype(np.float32)
+    diff = (x-y).flatten('C')
+    rmse = np.sqrt(np.mean(diff**2))
+    result = 20 * np.log10(_max/rmse)
+    return result
+
+def get_lr(path,factor):
+    img = cv2.imread(path)
+    size = int(len(img)/factor)
+    lr = cv2.GaussianBlur(img,(5,5),0)
+    lr = cv2.resize(lr,(size,size),cv2.INTER_AREA)
+    lr = cv2.resize(lr,(len(img),len(img)),cv2.INTER_CUBIC)
+    return lr
   
 import keras
 import tensorflow as tf
@@ -69,41 +99,13 @@ model_json = model.to_json()
 with open(save_path+"/model.json".format(acc), 'w') as json_file:
     json_file.write(model_json)
     
-test = cv2.imread(os.listdir()[1])
-def get_lr(path,factor):
-    img = cv2.imread(path)
-    size = int(len(img)/factor)
-    lr = cv2.GaussianBlur(img,(5,5),0)
-    lr = cv2.resize(lr,(size,size),cv2.INTER_AREA)
-    lr = cv2.resize(lr,(len(img),len(img)),cv2.INTER_CUBIC)
-    return lr
-
 
 # Validation
-low = get_lr(os.listdir()[1],4)
+test = cv2.imread(os.listdir()[1])
+low = get_lr(test,4)
 low = np.expand_dims(lr,axis=-1)
+pred = np.squeeze(model.predict(low))
 
-pred = model.predict(lr)
-
-def postprocess(pred):
-  pred[pred[:] > 255] = 255
-  pred[pred[:] < 0] = 0
-  pred = pred.astype(np.uint8)
-  return pred
-
-def psnr(x, y, peak=255):
-    '''
-    :param x: images
-    :param y: another images
-    :param peak: MAX_i peak. if int8 -> peak =255
-    :return: return psnr value
-    '''
-    _max = peak
-    x = x.astype(np.float32)
-    y = y.astype(np.float32)
-    diff = (x-y).flatten('C')
-    rmse = np.sqrt(np.mean(diff**2))
-    result = 20 * np.log10(_max/rmse)
-    return result
-  
-print(psnr(test,test))
+print('PSNR: ',psnr(test,pred))
+from skimage.measure import compare_ssim as ssim
+print('SSIM: ',ssim(test,pred,multichannel =True))
