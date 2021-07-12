@@ -7,6 +7,6 @@ Goal of SISR is converting Low Resolution(LR) image into High Resolution(HR) ima
 To implement [Image Super-Resolution Using Deep Convolutional Networks(ECCV 2014).](https://arxiv.org/abs/1501.00092), 3 convolutional layers are applied [91 images](http://mmlab.ie.cuhk.edu.hk/projects/SRCNN.html). Image patch size is 33, and decomposed into 24,800 sub-images. Each convolutional layers have filter size 9,1,5 and 64, 32, 1 channel size. For validation, [Set5](https://paperswithcode.com/dataset/set5) was used.
 
 ## [VDSR](https://github.com/imeunu/SuperResolution/tree/main/VDSR)
-To implement [Accurate Image Super-Resolution Using Very Deep Convolutional Networks](https://arxiv.org/abs/1511.04587), 
+[Accurate Image Super-Resolution Using Very Deep Convolutional Networks](https://arxiv.org/abs/1511.04587) was inspired by VGG-net. 20 weight layers and extremely high learning rates were used.
 
 ## [SRGAN](https://github.com/imeunu/SuperResolution/tree/main/SRGAN)
