@@ -31,10 +31,10 @@ def shave(image, border):
     return img
 
 def postprocess(pred):
-  pred[pred[:] > 255] = 255
-  pred[pred[:] < 0] = 0
-  pred = pred.astype(np.uint8)
-  return pred
+    pred[pred[:] > 255] = 255
+    pred[pred[:] < 0] = 0
+    pred = pred.astype(np.uint8)
+    return pred
 
 def psnr(x, y, peak=255):
     '''
