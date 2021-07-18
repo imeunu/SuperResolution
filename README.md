@@ -7,6 +7,6 @@ Goal of SISR is converting Low Resolution(LR) image into High Resolution(HR) ima
 [Image Super-Resolution Using Deep Convolutional Networks(ECCV 2014)](https://arxiv.org/abs/1501.00092) reinterpreted sparse-coding based SR method as deep convolutional network. To implement SRCNN, 3 convolutional layers of filter size 9,1,5 and 64, 32, 1 channel size are applied.[91 images](http://mmlab.ie.cuhk.edu.hk/projects/SRCNN.html) were used for training. Image patch size is 33, and decomposed into 24,800 sub-images. For validation, [Set5](https://paperswithcode.com/dataset/set5) was used.
 
 ## [VDSR](https://github.com/imeunu/SuperResolution/tree/main/VDSR)
-[Accurate Image Super-Resolution Using Very Deep Convolutional Networks(CVPR 2016)](https://arxiv.org/abs/1511.04587) was inspired by VGG-net. Solution for limitations of SRCNN are suggested by applying 20 weight layers and extremely high learning rates were used. Also, small filters are used for each layers so that contextual information over large image regions can be exploited.
+[Accurate Image Super-Resolution Using Very Deep Convolutional Networks(CVPR 2016)](https://arxiv.org/abs/1511.04587) was inspired by VGG-net. Solution for limitations of SRCNN are suggested by applying 20 weight layers, extremely high learning rates, residual images were used. Also, small filters are used for each layers so that contextual information over large image regions can be exploited.
 
 ## [SRGAN](https://github.com/imeunu/SuperResolution/tree/main/SRGAN)
