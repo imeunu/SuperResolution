@@ -59,7 +59,6 @@ def get_lr(path,factor):
     lr = cv2.resize(lr,(len(img),len(img)),cv2.INTER_CUBIC)
     return lr
   
-import keras
 import tensorflow as tf
 from tensorflow.keras import optimizers
 from tensorflow.keras.models import Sequential, load_model, model_from_json 
@@ -67,7 +66,7 @@ from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.callbacks import ReduceLROnPlateau, ModelCheckpoint
 
 # Build SRCNN
-def build_SRCNN():
+def SRCNN():
     model = Sequential()
     model.add(Conv2D(filters=64, kernel_size = (9, 9), activation='relu', padding='same'))
     model.add(Conv2D(filters=32, kernel_size = (1, 1), activation='relu', padding='same'))
@@ -81,7 +80,7 @@ callbacks_list = [
     ModelCheckpoint(filepath = save_path+"/weights.{loss:.4f}.hdf5",
                     monitor = 'loss', save_best_only=True),
     ReduceLROnPlateau(monitor='loss', factor=0.1, patience=10, verbose=1, mode='min', min_delta=1e-4)]
-model = build_SRCNN()
+model = SRCNN()
 history = model.fit(lr,hr,epochs=10000,batch_size=64,callbacks=callbacks_list)
   
 # Save Architecture
