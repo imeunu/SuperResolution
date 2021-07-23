@@ -62,11 +62,22 @@ history = model.fit(lr,hr,epochs=10000,batch_size=64,callbacks=callbacks_list)
 save_model(model, save_path)
     
 # Validation
-test = cv2.imread(os.listdir()[1])
-low = get_lr(test,4)
-low = np.expand_dims(lr,axis=-1)
-pred = np.squeeze(model.predict(low))
+def run(path,factor,model):
+    img = cv2.imread(path)
+    lr = get_lr(img,factor)
+    low = cv2.cvtColor(lr,cv2.COLOR_RGB2YCrCb)
+    y, cr, cb = cv2.split(low)
+    y = np.expand_dims(y,axis=0)
+    y = np.expand_dims(y,axis=-1)
+    pred = np.squeeze(model.predict(y))
+    pred = postprocess(pred)
+    pred = cv2.merge((pred,cr,cb))
+    pred = cv2.cvtColor(pred,cv2.COLOR_YCrCb2RGB)
+    result = psnr(img,pred)
+    print('predicted psnr:',result)
+    print('lr psnr:',psnr(lr,img))
+    plot(pred)
 
-print('PSNR: ',psnr(test,pred))
-from skimage.measure import compare_ssim as ssim
-print('SSIM: ',ssim(test,pred,multichannel =True))
+run(os.listdir()[1],3,model)
+# from skimage.measure import compare_ssim as ssim
+# print('SSIM: ',ssim(test,pred,multichannel =True))
