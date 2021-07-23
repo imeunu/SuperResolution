@@ -2,7 +2,6 @@ from google.colab import drive
 drive.mount('/content/gdrive')
 
 import os
-
 import cv2
 import h5py
 import matplotlib.pyplot as plt
