@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 def get_lr(img, scale, width, height, radius=5):
-    '''Get Low Resolution PIL Image from PIL Image'''
+    '''Get Low Resolution PIL Image from High Resolution PIL Image'''
     w, h = img.width, img.height
     lr = hr.filter(ImageFilter.GaussianBlur(radius))
     lr = lr.resize((img.width // scale, img.height // scale),
