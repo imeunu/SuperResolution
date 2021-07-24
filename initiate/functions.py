@@ -41,3 +41,11 @@ def rgb2ycbcr(img):
     y = 0.299 * r + 0.587 * g + 0.114 * b
     cb = -0.169 * r - 0.331 * g + 0.5 * b
     cr = 0.5 * r - 0.419 * g - 0.081 * b
+    return np.array([y,cb,cr])
+
+def ycbcr2rgb(img):
+    y = img[:, :, 0]; cb = img[:, :, 1]; cr = img[:, :, 2]
+    r = y + 1.5748 * cr
+    g = y - 0.18732 * cb - 0.46812 * cr
+    b = y + 1.8556 * cb
+    return np.array([r,g,b])
