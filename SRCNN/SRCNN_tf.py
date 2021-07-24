@@ -20,7 +20,7 @@ def get_lr(img, scale, width, height, radius=5):
     lr = hr.filter(ImageFilter.GaussianBlur(radius))
     lr = lr.resize((img.width // scale, img.height // scale),
                    resample = Image.BICUBIC)
-    lr = lr.resize((width, height, reample = Image.BICUBIC))
+    lr = lr.resize((width, height, resample = Image.BICUBIC))
     return lr
 
 def SRCNN():
