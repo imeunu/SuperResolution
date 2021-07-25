@@ -7,7 +7,6 @@ def plot(img):
 def postprocess(img):
     img[img[:] > 255] = 255
     img[img[:] < 0] = 0
-    img = img.astype(np.uint8)
     return img
 
 def psnr(x, y, peak=255):
@@ -21,8 +20,8 @@ def psnr(x, y, peak=255):
     x = x.astype(np.float32)
     y = y.astype(np.float32)
     diff = (x-y).flatten('C')
-    rmse = np.sqrt(np.mean(diff**2))
-    result = 20 * np.log10(_max/rmse)
+    mse = np.mean(diff**2)
+    result = 10 * np.log10(_max/rmse)
     return result
 
 def save_model(model, save_path):
