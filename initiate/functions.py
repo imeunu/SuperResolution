@@ -16,13 +16,12 @@ def psnr(img1, img2):
     peak: MAX_i peak. if int8 -> peak =255
     return: psnr value
     '''
-    import math
     img1 = img1.astype(np.float64) / 255.
     img2 = img2.astype(np.float64) / 255.
     mse = np.mean((img1 - img2) ** 2)
     if mse == 0:
         return "Same Image"
-    return 10 * math.log10(1. / mse)
+    return 10 * np.log10(1. / mse)
 
 def save_model(model, save_path):
     model_json = model.to_json()
