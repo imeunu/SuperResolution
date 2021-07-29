@@ -106,4 +106,4 @@ if __name__ == '__main__':
 
     train(args)
     
-# model checkpoint, evaluation
+# Should add model checkpoint, evaluation
