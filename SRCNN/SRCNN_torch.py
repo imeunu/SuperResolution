@@ -106,4 +106,4 @@ if __name__ == '__main__':
 
     train(args)
     
-# model checkpoint, learning rate reduction, evaluation
+# model checkpoint, evaluation
