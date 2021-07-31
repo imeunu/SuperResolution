@@ -1,4 +1,5 @@
 import cv2
+import matplotlib.pyplot as plt
 import numpy as np
 
 def plot(img):
@@ -12,9 +13,8 @@ def postprocess(img):
 
 def psnr(img1, img2):
     '''
-    x: images
-    y: another images
-    peak: MAX_i peak. if int8 -> peak =255
+    x: image
+    y: another image
     return: psnr value
     '''
     img1 = img1.astype(np.float64) / 255.
@@ -26,12 +26,12 @@ def psnr(img1, img2):
 
 def save_model(model, save_path):
     model_json = model.to_json()
-    with open(save_path+"/model.json".format(acc), 'w') as json_file:
+    with open(save_path+"/model.json", 'w') as json_file:
         json_file.write(model_json)
 
     model.save_weights(save_path +"/final_weight.h5")
     model_json = model.to_json()
-    with open(save_path+"/model.json".format(acc), 'w') as json_file:
+    with open(save_path+"/model.json", 'w') as json_file:
         json_file.write(model_json)
 
 def rgb2ycbcr(img):
