@@ -6,7 +6,7 @@ import h5py
 import numpy as np
 from PIL import Image, ImageFilter
 
-from functions import rgb2ycbcr
+from functions import rgb2y
 
 def get_lr(img, scale, width, height, radius=5):
     '''Get Low Resolution PIL Image from High Resolution PIL Image'''
@@ -18,18 +18,19 @@ def get_lr(img, scale, width, height, radius=5):
     return lr
 
 def generate(args):
-    h5 = h5py.File(args.save_path, 'w')
+    save_path = os.path.join(args.save_path,'data.h5')
+    h5 = h5py.File(save_path, 'w')
     highs, lows = [], []
 
+    os.chdir(args.img_dir)
     for path in glob.glob('*.{}'.format(args.img_ext)):
         hr = Image.open(path).convert('RGB')
         hr_w = (hr.width // args.scale) * args.scale
         hr_h = (hr.height // args.scale) * args.scale
         hr = hr.resize((hr_w, hr_h), resample = Image.BICUBIC)
         lr = get_lr(hr, args.scale, hr_w, hr_h, args.radius)
-        hr = rgb2ycbcr(hr)
-        lr = np.array(lr).astype(np.float32)
-        lr = rgb2ycbcr(lr)
+        hr = rgb2y(np.array(hr).astype(np.float32))
+        lr = rgb2y(np.array(lr).astype(np.float32))
 
         for w in range(0, lr.shape[0] - args.patch_size + 1, args.stride):
             for h in range(0, lr.shape[1] - args.patch_size + 1, args.stride):
@@ -38,6 +39,7 @@ def generate(args):
 
     lows = np.array(lows)
     highs = np.array(highs)
+    print('Saved',np.shape(lows)[0],'Patches')
 
     h5.create_dataset('lr', data = lows)
     h5.create_dataset('hr', data = highs)
