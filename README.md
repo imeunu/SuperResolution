@@ -14,7 +14,7 @@ Goal of SISR is converting Low Resolution(LR) image into High Resolution(HR) ima
 - Validation Data: [Set5](https://paperswithcode.com/dataset/set5) was used.
 
 ## [VDSR](https://github.com/imeunu/SuperResolution/tree/main/VDSR)
-[Accurate Image Super-Resolution Using Very Deep Convolutional Networks(CVPR 2016)](https://arxiv.org/abs/1511.04587) was inspired by VGG-net. Solution for limitations of SRCNN are suggested with several techniques so that contextual information over large image regions can be exploited.
+[Accurate Image Super-Resolution Using Very Deep Convolutional Networks(CVPR 2016)](https://arxiv.org/abs/1511.04587) was inspired by VGG-net. It supplemented the limitations of SRCNN with several techniques by utilizing contextual information about large image regions to be exploited.
 
 **Implement Details**
 - 20 Convolutional layers with filter size 3, zero padding
