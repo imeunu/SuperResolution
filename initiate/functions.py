@@ -78,3 +78,11 @@ def ycbcr2rgb(img):
     g = y - 0.18732 * cb - 0.46812 * cr
     b = y + 1.8556 * cb
     return np.array([r,g,b])
+
+def get_lr(img, scale, radius=5):
+    '''Get Low Resolution PIL Image from High Resolution PIL Image'''
+    lr = img.filter(ImageFilter.GaussianBlur(radius))
+    lr = lr.resize((img.width // scale, img.height // scale),
+                   resample = Image.BICUBIC)
+    lr = lr.resize((img.width, img.height), resample = Image.BICUBIC)
+    return lr
