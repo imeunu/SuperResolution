@@ -37,11 +37,7 @@ def save_model(model, save_path):
     model_json = model.to_json()
     with open(save_path+"/model.json", 'w') as json_file:
         json_file.write(model_json)
-
     model.save_weights(save_path +"/final_weight.h5")
-    model_json = model.to_json()
-    with open(save_path+"/model.json", 'w') as json_file:
-        json_file.write(model_json)
 
 def rgb2y(img):
     if type(img) == np.ndarray:
