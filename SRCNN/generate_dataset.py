@@ -8,14 +8,6 @@ from PIL import Image, ImageFilter
 
 from functions import rgb2y
 
-def get_lr(img, scale, radius=5):
-    '''Get Low Resolution PIL Image from High Resolution PIL Image'''
-    lr = img.filter(ImageFilter.GaussianBlur(radius))
-    lr = lr.resize((img.width // scale, img.height // scale),
-                   resample = Image.BICUBIC)
-    lr = lr.resize((img.width, img.height), resample = Image.BICUBIC)
-    return lr
-
 def generate(args):
     save_path = os.path.join(args.save_path,'data.h5')
     h5 = h5py.File(save_path, 'w')
