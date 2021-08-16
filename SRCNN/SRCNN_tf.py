@@ -64,18 +64,19 @@ def train(args):
 
     return model
 
-def run(path,scale,model):
-    img = Image.open(path)
-    lr = get_lr(img,scale).convert('YCbCr')
-    y, cb, cr = lr.split()
+def evaluate(path,scale,model):
+    img = Image.open(path).convert('RGB')
+    lr = np.array(get_lr(img,scale))
+    lr = rgb2ycbcr(lr)
+    y, cb, cr = lr[:,:,0], lr[:,:,1], lr[:,:,2]
     y = np.expand_dims(np.array(y), axis = 0)
     y = np.expand_dims(y, axis = -1)
     y = np.squeeze(model.predict(y))
-    pred = ycbcr2rgb(np.array([y,cb,cr]))
+    pred = ycbcr2rgb(np.array([y,cb,cr]).transpose(1,2,0))
     pred = postprocess(pred)
-    result = psnr(img,pred)
+    result = psnr(np.array(img),pred)
     print('predicted psnr:',result)
-    print('lr psnr:',psnr(lr,img))
+    print('lr psnr:',psnr(lr,np.array(img)))
     # print('SSIM: ',ssim(test,pred,multichannel =True))
 
 if __name__ == '__main__':
@@ -90,5 +91,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     train(args)
-    if not args.test_path:
-        run(args.test_path, args.scale, model)
+    if args.test_path:
+        predicted = evaluate(args.test_path, args.scale, model)
