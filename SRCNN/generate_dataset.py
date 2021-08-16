@@ -8,13 +8,12 @@ from PIL import Image, ImageFilter
 
 from functions import rgb2y
 
-def get_lr(img, scale, width, height, radius=5):
+def get_lr(img, scale, radius=5):
     '''Get Low Resolution PIL Image from High Resolution PIL Image'''
-    w, h = img.width, img.height
     lr = img.filter(ImageFilter.GaussianBlur(radius))
     lr = lr.resize((img.width // scale, img.height // scale),
                    resample = Image.BICUBIC)
-    lr = lr.resize((width, height), resample = Image.BICUBIC)
+    lr = lr.resize((img.width, img.height), resample = Image.BICUBIC)
     return lr
 
 def generate(args):
@@ -25,10 +24,7 @@ def generate(args):
     os.chdir(args.img_dir)
     for path in glob.glob('*.{}'.format(args.img_ext)):
         hr = Image.open(path).convert('RGB')
-        hr_w = (hr.width // args.scale) * args.scale
-        hr_h = (hr.height // args.scale) * args.scale
-        hr = hr.resize((hr_w, hr_h), resample = Image.BICUBIC)
-        lr = get_lr(hr, args.scale, hr_w, hr_h, args.radius)
+        lr = get_lr(hr, args.scale, args.radius)
         hr = rgb2y(np.array(hr).astype(np.float32))
         lr = rgb2y(np.array(lr).astype(np.float32))
 
