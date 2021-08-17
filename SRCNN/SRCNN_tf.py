@@ -1,10 +1,10 @@
 import argparse
 import os
 
+import cv2
 import h5py
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image, ImageFilter
 import tensorflow as tf
 from tensorflow.keras import callbacks, layers, models, optimizers
 
@@ -12,7 +12,7 @@ from tensorflow.keras.models import Sequential, load_model, model_from_json
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.callbacks import ReduceLROnPlateau, ModelCheckpoint
 
-from functions import ycbcr2rgb, postprocess, psnr, save_model
+from functions import ycbcr2rgb, postprocess, psnr, save_model, plot
 
 def get_lr(img, scale, width, height, radius=5):
     '''Get Low Resolution PIL Image from High Resolution PIL Image'''
@@ -65,19 +65,21 @@ def train(args):
     return model
 
 def evaluate(path,scale,model):
-    img = Image.open(path).convert('RGB')
-    lr = np.array(get_lr(img,scale))
-    lr = rgb2ycbcr(lr)
-    y, cb, cr = lr[:,:,0], lr[:,:,1], lr[:,:,2]
-    y = np.expand_dims(np.array(y), axis = 0)
-    y = np.expand_dims(y, axis = -1)
-    y = np.squeeze(model.predict(y))
-    pred = ycbcr2rgb(np.array([y,cb,cr]).transpose(1,2,0))
+    img = cv2.imread(path)
+    lr = make_lr(img,factor)
+    low = cv2.cvtColor(lr,cv2.COLOR_RGB2YCrCb)
+    y, cr, cb = cv2.split(low)
+    y = np.expand_dims(y,axis=0)
+    y = np.expand_dims(y,axis=-1)
+    pred = np.squeeze(model.predict(y))
+    pred = postprocess(pred).astype(np.uint8)
+    pred = cv2.merge((pred,cr,cb))
+    pred = cv2.cvtColor(pred,cv2.COLOR_YCrCb2RGB)
     pred = postprocess(pred)
-    result = psnr(np.array(img),pred)
+    result = psnr(img,pred)
     print('predicted psnr:',result)
-    print('lr psnr:',psnr(lr,np.array(img)))
-    # print('SSIM: ',ssim(test,pred,multichannel =True))
+    print('lr psnr:',psnr(lr,img))
+    plot(pred)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
