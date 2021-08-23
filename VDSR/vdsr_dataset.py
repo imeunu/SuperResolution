@@ -3,7 +3,6 @@ import os
 
 import cv2
 import h5py
-import numpy as np
 
 def get_residual(img, scale):
     height, width, _ = img.shape
