@@ -137,12 +137,3 @@ for e in range(last_epoch+1, last_epoch+1+epoch):
     val_loss_list.append(val_loss)
     bicubic_tr_loss_list.append(bicubic_tr_loss)
     bicubic_val_loss_list.append(bicubic_val_loss)
-        
-        
-
-        
-        
-    
-
-                                                              
-
