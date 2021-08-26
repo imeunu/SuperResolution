@@ -1,4 +1,3 @@
-import glob
 import os
 
 import cv2
@@ -8,9 +7,9 @@ from functions import walk
 
 def get_residual(img, scale):
     height, width, _ = img.shape
-    lr = cv2.resize(img,(height//scale,width//scale), cv2.INTER_CUBIC)
-    lr = cv2.resize(lr,(height,width),cv2.INTER_CUBIC)
-    residual = img.split()[0] - lr.split()[0]
+    lr = cv2.resize(img,(width//scale,height//scale), cv2.INTER_CUBIC)
+    lr = cv2.resize(lr,(width,height),cv2.INTER_CUBIC)
+    residual = cv2.split(img)[0] - cv2.split(lr)[0]
     return residual
 
 def generate(args):
@@ -23,7 +22,7 @@ def generate(args):
         ext = os.path.splitext(filename)[-1]
         if not ext in args['img_ext']:
             continue
-        path = os.path.join(folder,filename).replace(r'\\\\\\\\\\\\\\\','/')
+        path = os.path.join(folder,filename)
         hr = cv2.imread(path, cv2.IMREAD_COLOR)
         hr = cv2.cvtColor(hr, cv2.COLOR_BGR2YCrCb)
         y = cv2.split(hr)[0]
@@ -43,8 +42,8 @@ def sliceNappend(img,imgs,args):
 
 if __name__ == '__main__':
     args = {
-        'img_dir' : 'C:\Users\eunwoo\Desktop\Code\srcnn\Train',
-        'save_path' : 'C:\Users\eunwoo\Desktop\Code\savehere',
-        'img_ext' : 'bmp',
+        'img_dir' : 'C:\\Users\\eunwoo\\Desktop\\Images',
+        'save_path' : 'C:\\Users\\eunwoo\\Desktop\\Code\\savehere',
+        'img_ext' : ['.bmp','.jpg'],
         'size' : 41}
     generate(args)
