@@ -3,20 +3,23 @@ import os
 import cv2
 import h5py
 
-from functions import walk
+def walk(folder):
+    for dirpath, dirs, files in os.walk(folder):
+        for filename in files:
+            yield dirpath, filename
 
 def get_residual(img, scale):
     height, width, _ = img.shape
     lr = cv2.resize(img,(width//scale,height//scale), cv2.INTER_CUBIC)
     lr = cv2.resize(lr,(width,height),cv2.INTER_CUBIC)
     residual = cv2.split(img)[0] - cv2.split(lr)[0]
-    return residual
+    return residual, lr
 
 def generate(args):
     try: os.mkdir(args['save_path'])
     except: pass
     h5 = h5py.File(os.path.join(args['save_path'],'train_291.h5'),'w')
-    lows, highs, scales = [], [], [2,3,4]
+    lows, residuals, scales = [], [], [2,3,4]
 
     for folder, filename in walk(args['img_dir']):
         ext = os.path.splitext(filename)[-1]
@@ -25,13 +28,12 @@ def generate(args):
         path = os.path.join(folder,filename)
         hr = cv2.imread(path, cv2.IMREAD_COLOR)
         hr = cv2.cvtColor(hr, cv2.COLOR_BGR2YCrCb)
-        y = cv2.split(hr)[0]
         for scale in scales:
-            residual = get_residual(hr,scale)
-            lows = sliceNappend(residual,lows,args)
-            highs = sliceNappend(y,highs,args)
-    h5.create_dataset('residual', data = lows)
-    h5.create_dataset('hr', data = highs)
+            residual, lr = get_residual(hr,scale)
+            lows = sliceNappend(cv2.split(lr)[0],lows,args)
+            residuals = sliceNappend(residual,residuals,args)
+    h5.create_dataset('residual', data = residuals)
+    h5.create_dataset('lr', data = lows)
     h5.close()
 
 def sliceNappend(img,imgs,args):
