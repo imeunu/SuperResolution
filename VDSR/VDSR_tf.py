@@ -78,9 +78,10 @@ def evaluate(args):
     model = load_model(json,weight)
 
     img = cv2.imread(args['val_path'], cv2.IMREAD_COLOR)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
     _, lr = get_residual(img)
     y, cr, cb = cv2.split(lr)
+    y = (y - 127.5) / 255.
 
     residual = model.predict(y)
     y = postprocess(y + residual)
