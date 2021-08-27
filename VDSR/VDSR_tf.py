@@ -46,9 +46,9 @@ def VDSR(args,data_num):
                          momentum = args['momentum'],
                          clipnorm = args['grad_clip'])
 
-    model.compile(loss = 'mean_square_error',
+    model.compile(loss = 'mean_squared_error',
                   optimizer = sgd,
-                  metrics = ['mean_square_error'])
+                  metrics = ['mean_squared_error'])
     return model
 
 def train(lr, residual, args):
