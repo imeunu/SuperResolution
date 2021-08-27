@@ -22,20 +22,20 @@ def VDSR(args,data_num):
     model.add(layers.Conv2D(
               filters = 64, kernel_size = (3,3),
               activation = 'relu', padding = 'same',
-              kernel_initializer = 'glorot_uniform'),
+              kernel_initializer = 'glorot_uniform',
               kernel_regularizer = regularizers.l2(args['l2']),
-              input_shape = (None,None,1))
+              input_shape = (None,None,1)))
     for i in range(18):
         model.add(layers.Conv2D(
                   filters = 64, kernel_size = (3,3),
                   activation = 'relu', padding = 'same',
-                  kernel_initializer = 'glorot_uniform'),
-                  kernel_regularizer = regularizers.l2(args['l2']))
+                  kernel_initializer = 'glorot_uniform',
+                  kernel_regularizer = regularizers.l2(args['l2'])))
     model.add(layers.Conv2D(
               filters = 1, kernel_size = (3,3),
               activation = 'linear', padding = 'same',
-              kernel_initializer = 'glorot_uniform'),
-              kernel_regularizer = regularizers.l2(args['l2']))
+              kernel_initializer = 'glorot_uniform',
+              kernel_regularizer = regularizers.l2(args['l2'])))
     
     lr_schedule = optimizers.schedules.ExponentialDecay(
         initial_learning_rate = args['lr'],
@@ -52,6 +52,8 @@ def VDSR(args,data_num):
     return model
 
 def train(lr, residual, args):
+    lr = np.expand_dims(lr,axis = -1)
+    residual = np.expand_dims(residual, axis = -1)
     callbacks_list = [
         ModelCheckpoint(
                     filepath = args['save_path'] + "/weights.{loss:.4f}.hdf5",
