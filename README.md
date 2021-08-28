@@ -11,6 +11,7 @@ Goal of SISR is converting Low Resolution(LR) image into High Resolution(HR) ima
 - Channel Size: 64, 32, 1
 - Training Data: [91 images](http://mmlab.ie.cuhk.edu.hk/projects/SRCNN.html)
 - Image Patch Size: 33 (decomposed into 24,800 sub-images)
+- Kernel Initialization: Random Gaussian Distribution(zero mean, 0.001 std, 0 for bias)
 - Validation Data: [Set5](https://paperswithcode.com/dataset/set5) was used.
 
 ## [VDSR](https://github.com/imeunu/SuperResolution/tree/main/VDSR)
@@ -18,9 +19,11 @@ Goal of SISR is converting Low Resolution(LR) image into High Resolution(HR) ima
 
 **Implement Details**
 - 20 Convolutional layers with filter size 3, zero padding
-- Extremely high learning rates with Adjustable Gradient Clipping
-- Residual Learning
+- Extremely high learning rates(1e-1, decay factor 10 in every 20 epochs)
+- Adjustable Gradient Clipping
+- Residual Learning in Y Channel
 - SGD momentum: 0.9
+- Kernel Initialization: Uniform Xavier Initialization
 - Regularized by weight decay(L2 penalty multiplied by 0.0001)
 
 ## [SRGAN](https://github.com/imeunu/SuperResolution/tree/main/SRGAN)
