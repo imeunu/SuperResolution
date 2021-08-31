@@ -25,5 +25,3 @@ Goal of SISR is converting Low Resolution(LR) image into High Resolution(HR) ima
 - SGD momentum: 0.9
 - Kernel Initialization: Uniform Xavier Initialization
 - Regularized by weight decay(L2 penalty multiplied by 0.0001)
-
-## [SRGAN](https://github.com/imeunu/SuperResolution/tree/main/SRGAN)
