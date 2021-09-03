@@ -19,6 +19,7 @@ Goal of SISR is converting Low Resolution(LR) image into High Resolution(HR) ima
 
 **Implement Details**
 - 20 Convolutional layers with filter size 3, zero padding
+- Training Data: 91 images and Berkeley Segmentation Datasets
 - Extremely high learning rates(1e-1, decay factor 10 in every 20 epochs)
 - Adjustable Gradient Clipping
 - Residual Learning in Y Channel
