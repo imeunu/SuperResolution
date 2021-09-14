@@ -24,5 +24,5 @@ Goal of SISR is converting Low Resolution(LR) image into High Resolution(HR) ima
 - Adjustable Gradient Clipping
 - Residual Learning in Y Channel
 - SGD momentum: 0.9
-- Kernel Initialization: Uniform Xavier Initialization
+- Kernel Initialization: He Initialization
 - Regularized by weight decay(L2 penalty multiplied by 0.0001)
